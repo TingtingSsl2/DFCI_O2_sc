@@ -1,0 +1,63 @@
+
+# o2 ssh set up, https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1600651365/How+to+Generate+SSH+Keys
+ssh-keygen -t rsa #local Mac
+ssh #passphrase I give
+scp ~/.ssh/id_rsa.pub tiz228@o2.hms.harvard.edu:/home/tiz228/
+mv id_rsa.pub ~/.ssh/authorized_keys #o2
+chmod 0600 ~/.ssh/authorized_keys
+chmod 0700 ~/.ssh
+chmod g-w /home/$USER
+
+# o2 login
+ssh tiz228@o2.hms.harvard.edu
+ssh # then DUO push
+
+# o2 set up conda env, https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1594263516/Conda+on+O2
+module load conda2/4.2.13
+conda create -n sc
+source activate sc
+srun --pty -p interactive --mem 16G -t 0-12:00 /bin/bash
+conda install -c conda-forge -y r-base=4.2.0
+R
+install.packages("dplyr") # et.al
+
+scp /Users/tingting/Dropbox\ \(Partners\ HealthCare\)/Github/NGS_workflow_scRNAseq/* tiz228@o2.hms.harvard.edu:~/scripts/
+
+module load cellranger/6.0.0
+nohup cellranger count  --id=10k_PBMC_3p \
+                  --transcriptome=/home/tiz228/ref/10X/human/refdata-gex-GRCh38-2020-A \
+                  --fastqs=/n/scratch3/users/t/tiz228/10k_PBMC_3p_nextgem_Chromium_X_fastqs \
+                  --sample=10k_PBMC_3p_nextgem_Chromium_X \
+                  --expect-cells=10000 &
+
+# O2 30 days temp disk
+/n/scratch3/users/t/tiz228/
+
+# O2 lindsley shared disk
+/n/data2/dfci/medonc/lindsley
+
+# O2 VS code, https://harvardmed.atlassian.net/wiki/spaces/O2/pages/2051211265/VS+Code+Server+on+O2
+# download and install XQuartz on local Mac
+# when login O2, remember to add -Y
+ssh -Y -L $PORT:127.0.0.1:$PORT $CLUSTER_USER@o2.hms.harvard.edu
+export PORT=51234 
+srun --pty -p priority -t 8:0:0 --tunnel $PORT:$PORT bash 
+~/.local/lib/code-server-3.12.0/bin/code-server 
+# copy and past http to chrome
+password: b35c457ceca40a4d918d7bb7
+
+# O2 FileZilla
+host: transfer.rc.hms.harvard.edu
+port: 22
+
+
+# Rstudio on O2, https://harvardmed.atlassian.net/wiki/spaces/O2/pages/1623425967/RStudio+on+O2
+ssh -Y -L $PORT:127.0.0.1:$PORT $CLUSTER_USER@o2.hms.harvard.edu
+export PORT=51234 
+module load rstudio_launcher/1.0
+module load gcc/9.2.0
+module load R/4.2.1
+srun -t 0-12:00 --pty -p interactive -c 1 --mem=16G --tunnel $PORT:$PORT RStudio_launcher.sh $PORT
+
+# O2 conda error
+source ~/.bashrc # inside of bash script worked, can try at login node
