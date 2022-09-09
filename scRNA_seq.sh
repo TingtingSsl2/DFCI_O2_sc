@@ -83,7 +83,7 @@ Rscript makeGeneAnnoTable.R $refdir $geneName_file
 
 # step5: run scrublet
 matrixdir="/outs/filtered_feature_bc_matrix"
-~/anaconda3/bin/python scrublet_multi.py $indir $matrixdir $scrubletdir "${SAMPLES[@]}" # if run scripts on server
+~/anaconda3/bin/python scrublet_multi.py $indir $matrixdir $scrubletdir "${samples[@]}" # if run scripts on server
 
 
 # step6: run Seurat
