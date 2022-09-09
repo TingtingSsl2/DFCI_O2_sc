@@ -43,7 +43,7 @@ scriptdir="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
 # load modules
 #conda init /PHShome/tz949/anaconda3/envs/scrnaseq
 source ~/.bashrc
-source activate monocle3
+source activate sc
 module load cellranger/6.0.0 
 
 
