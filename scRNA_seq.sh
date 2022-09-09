@@ -83,7 +83,6 @@ Rscript makeGeneAnnoTable.R $refdir $geneName_file
 
 # step5: run scrublet
 matrixdir="/outs/filtered_feature_bc_matrix"
-SAMPLES=("Pool107_23" "Pool107_24" "Pool107_25" "Pool107_26" "Pool107_27" "Pool107_28" "Pool107_29" "Pool107_30" "Pool107_31" "Pool107_32" "Pool107_33" "Pool107_34" "Pool107_35" "Pool107_36" "Pool107_37" "Pool107_38" "Pool107_39")
 ~/anaconda3/bin/python scrublet_multi.py $indir $matrixdir $scrubletdir "${SAMPLES[@]}" # if run scripts on server
 
 

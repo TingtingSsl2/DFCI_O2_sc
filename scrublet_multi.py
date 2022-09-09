@@ -15,7 +15,7 @@ args = sys.argv
 input_dir_prefix = args[1]
 input_dir_suffix = args[2]
 out_dir = args[3]
-samples = args[4:]
+samples = args[4].split(",")
 
 for sample in samples:
   input_dir = input_dir_prefix + sample + input_dir_suffix
