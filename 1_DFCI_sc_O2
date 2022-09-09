@@ -16,7 +16,7 @@ ssh # then DUO push
 module load conda2/4.2.13
 conda create -n sc
 source activate sc
-srun --pty -p interactive --mem 16G -t 0-12:00 /bin/bash
+srun --pty -p interactive --mem 64G -t 0-12:00 /bin/bash
 conda install -c conda-forge -y r-base=4.2.0
 R
 install.packages("dplyr") # et.al
@@ -34,7 +34,7 @@ nohup cellranger count  --id=10k_PBMC_3p \
 /n/scratch3/users/t/tiz228/
 
 # O2 lindsley shared disk
-/n/data2/dfci/medonc/lindsley
+/n/data2/dfci/medonc/lindsley/
 
 # O2 VS code, https://harvardmed.atlassian.net/wiki/spaces/O2/pages/2051211265/VS+Code+Server+on+O2
 # download and install XQuartz on local Mac
@@ -61,3 +61,7 @@ srun -t 0-12:00 --pty -p interactive -c 1 --mem=16G --tunnel $PORT:$PORT RStudio
 
 # O2 conda error
 source ~/.bashrc # inside of bash script worked, can try at login node
+
+# O2 scrublet install error
+module load gcc/6.2.0
+pip install scrublet
