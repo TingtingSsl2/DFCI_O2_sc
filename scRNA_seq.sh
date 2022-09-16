@@ -25,7 +25,7 @@ countTable_folder="BCOR_U2af1_Bcor_10x"
 # R setting
 pwd="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
 indir="/n/data2/dfci/medonc/lindsley/Tingting/data/BCOR_U2af1_Bcor_10x/"
-outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/"
+outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/individual/"
 scrubletdir="/n/data2/dfci/medonc/lindsley/Tingting/output/scrublet/"
 samples="Pool107_23,Pool107_24,Pool107_25,Pool107_26,Pool107_27,Pool107_28,Pool107_29,Pool107_30,Pool107_31,Pool107_32,Pool107_33,Pool107_34,Pool107_35,Pool107_36,Pool107_37,Pool107_38,Pool107_39"
 projectName="rahul2022"
