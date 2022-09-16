@@ -31,14 +31,13 @@ marker_sheet = args[8]
 flag = args[9]
 mtPattern = args[10]
 rbPattern = args[11]
-mitoCutoff = as.numeric(args[12])
-sex = unlist(strsplit(args[13], ','))
-genotypes = unlist(strsplit(args[14], ','))
-refdir = args[15]
-scriptdir = args[16]
-
-message("Samples are:")
-print(samples)
+qc_cutoff = as.numeric(args[12])
+mitoCutoff = as.numeric(args[13])
+sex = unlist(strsplit(args[14], ','))
+genotypes = unlist(strsplit(args[15], ','))
+refdir = args[16]
+scriptdir = args[17]
+geneN = args[18]
 
 # message("Read in marker genes")
 # gsurl=marker_link
@@ -346,9 +345,6 @@ for (sample in samples) {
   scrna.list[[sample]]$nFeature_RNA <- NULL
 }
 
-#message("Run doublet detection scripts")
-#system2(command = "bash", args = c("run_scrublet_multi.sh"))
-
 message("Read in doublet scores")
 for (sample in samples){
   doublet_scores <- scan(paste0(scrubletdir, sample, "_srublet.score"))
@@ -374,8 +370,6 @@ for (sample in samples){
 dev.off()
 
 message("Filtered cells with 3SD of mean nCount and nFeature, percent of mito")
-qc_cutoff = 3
-mito_cutoff = mitoCutoff
 for (sample in samples){
   mean.nCount <- mean(scrna.list[[sample]]@meta.data$nUMI)
   sd.nCount <- sd(scrna.list[[sample]]@meta.data$nUMI)
@@ -465,3 +459,82 @@ for (sample in samples){
 }
 dev.off()  
 }
+
+message("Finding differentially expressed markers")
+scrna.markers.list <- list()
+markers.topN.list <- list()
+for (sample in samples){
+  scrna.markers <- FindAllMarkers(scrna.list[[sample]], only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+  names(scrna.markers)[names(scrna.markers) == "gene"] <- "geneSymbol"
+  scrna.markers <- cbind(scrna.markers, geneID=geneTable$geneID[match(scrna.markers$geneSymbol, geneTable$geneSymbol)])
+  scrna.markers.list[[sample]] <- scrna.markers
+  topN <- scrna.markers %>% group_by(cluster) %>% top_n(n = geneN, wt = avg_log2FC)
+  markers.topN.list[[sample]] <- topN
+  rm(scrna.markers)
+  rm(topN)
+}
+openxlsx::write.xlsx(scrna.markers.list, paste0(outdir, "markers.xls"))
+openxlsx::write.xlsx(markers.topN.list, paste0(outdir, "markers.topN.xls"))
+
+message("DE heatmap")
+pdf(file = paste0(outdir, "top10markers.heatmap.geneSymbol.pdf"))
+for (sample in samples){
+  plot1 <- DoHeatmap(scrna.list[[sample]], features = markers.topN.list[[sample]]$geneSymbol, size = 2, draw.lines = T, angle = 45, hjust = 0.2) + theme(axis.text.y = element_text(size = 5)) + NoLegend() + theme(aspect.ratio=10/10)
+  print(plot1 + coord_fixed())
+}
+dev.off()
+
+pdf(file = paste0(outdir, "top10markers.heatmap.geneID.pdf"))
+for (sample in samples){
+  plot1 <- DoHeatmap(scrna.list[[sample]], features = markers.topN.list[[sample]]$geneSymbol, size = 2, draw.lines = T, angle = 45, hjust = 0.2) + theme(axis.text.y = element_text(size = 5)) + NoLegend() + scale_y_discrete(breaks=markers.topN.list[[sample]]$geneSymbol, labels=geneTable$geneID[match(markers.topN.list[[sample]]$geneSymbol, geneTable$geneSymbol)]) + theme(aspect.ratio=10/10)
+  print(plot1 + coord_fixed())
+}
+dev.off()
+
+message("Top identified genes, feature plot")
+for (sample in samples){
+  topN <- Extract_Top_Markers(scrna.markers.list[[sample]], num_genes = geneN, named_vector = FALSE, make_unique = TRUE, gene_column = "geneSymbol")
+  pdf(paste0(outdir, sample, "_", "top10markers.geneSymbol.pdf"))
+  ggp = list()
+  for (marker in topN){
+    ggp[[marker]]=FeaturePlot(scrna.list[[sample]], features=marker)
+    print(ggp[[marker]])
+  }
+  dev.off()
+}
+
+for (sample in samples){
+  topN <- Extract_Top_Markers(scrna.markers.list[[sample]], num_genes = geneN, named_vector = FALSE, make_unique = TRUE, gene_column = "geneSymbol")
+  pdf(paste0(outdir, sample, "_", "top10markers.geneID.pdf"))
+  ggp = list()
+  for (marker in topN){
+    ggp[[marker]]=FeaturePlot(scrna.list[[sample]], features=marker) + ggtitle(geneTable$geneID[match(marker, geneTable$geneSymbol)])
+    print(ggp[[marker]])
+  }
+  dev.off()
+}
+
+message("Top identified genes, dot plot")
+pdf(file = paste0(outdir, "dotplot.DEtop10.geneSymbol.pdf"), width = 20, height = 10)
+for (sample in samples){
+  p1 <- DotPlot_scCustom(scrna.list[[sample]], features = topN, x_lab_rotate = TRUE, colors_use = "blue")
+  print(p1)
+}
+dev.off()
+
+pdf(file = paste0(outdir, "dotplot.DEtop10.geneID.pdf"), width = 20, height = 10)
+for (sample in samples){
+  p1 <- DotPlot_scCustom(scrna.list[[sample]], features = topN, x_lab_rotate = TRUE, colors_use = "blue") + scale_x_discrete(breaks=topN, labels=geneTable$geneID[match(topN, geneTable$geneSymbol)])
+  print(p1)
+}
+dev.off()
+
+pdf(paste0(outdir, "dotplot.DEtop10.clustered.geneSymbol.pdf"), width = 10, height = 15)
+p1 <- Clustered_DotPlot_relabel(scrna.list[[sample]], features = topN, x_lab_rotate = F, plot_km_elbow = FALSE, new_row_labels = topN)
+print(p1)
+dev.off()
+
+pdf(paste0(outdir, "dotplot.DEtop10.clustered.geneID.pdf"), width = 10, height = 15)
+p1 <- Clustered_DotPlot_relabel(scrna.list[[sample]], features = topN, plot_km_elbow = F, new_row_labels = geneTable$geneID[match(topN, geneTable$geneSymbol)])
+print(p1)
+dev.off()

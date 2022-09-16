@@ -34,11 +34,13 @@ marker_sheet="MarkerGenesFiltered"
 flag=1 #Options for cell clustering algorithm, 1=louvain, 2=GLMPCA, 3= leiden, 0=louvain and GLMPCA and leiden
 mtPattern="^mt"
 rbPattern="^Rp[sl]"
+qc_cutoff=3
 mitoCutoff=10
 sex="male,male,male,male,male,female,male,male,male,male,male,female,female,male,female,male,male"
 genotypes="U2Bcor,U2Bcor,Bcor,U2Bcor,U2,U2,Bcor,WT,WT,U2,U2,U2Bcor,Bcor,WT,WT,U2Bcor,Bcor"
 refdir="/n/data2/dfci/medonc/lindsley/reference/10X/mouse/refdata-gex-mm10-2020-A/genes/"
 scriptdir="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
+geneN=10
 
 # load modules
 #conda init /PHShome/tz949/anaconda3/envs/scrnaseq
@@ -88,5 +90,5 @@ matrixdir="/outs/filtered_feature_bc_matrix"
 
 # step6: run Seurat
 #bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff $sex $genotypes $refdir $scriptdir
+Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mitoCutoff $sex $genotypes $refdir $scriptdir $geneN
 
