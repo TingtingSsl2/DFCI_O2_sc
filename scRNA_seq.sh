@@ -25,7 +25,7 @@ countTable_folder="BCOR_U2af1_Bcor_10x"
 # R setting
 pwd="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
 indir="/n/data2/dfci/medonc/lindsley/Tingting/data/BCOR_U2af1_Bcor_10x/"
-outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/individual/"
+outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/"
 scrubletdir="/n/data2/dfci/medonc/lindsley/Tingting/output/scrublet/"
 samples="Pool107_23,Pool107_24,Pool107_25,Pool107_26,Pool107_27,Pool107_28,Pool107_29,Pool107_30,Pool107_31,Pool107_32,Pool107_33,Pool107_34,Pool107_35,Pool107_36,Pool107_37,Pool107_38,Pool107_39"
 projectName="rahul2022"
@@ -35,7 +35,7 @@ flag=1 #Options for cell clustering algorithm, 1=louvain, 2=GLMPCA, 3= leiden, 0
 mtPattern="^mt"
 rbPattern="^Rp[sl]"
 qc_cutoff=3
-mitoCutoff=10
+mito_cutoff=10
 sex="male,male,male,male,male,female,male,male,male,male,male,female,female,male,female,male,male"
 genotypes="U2Bcor,U2Bcor,Bcor,U2Bcor,U2,U2,Bcor,WT,WT,U2,U2,U2Bcor,Bcor,WT,WT,U2Bcor,Bcor"
 refdir="/n/data2/dfci/medonc/lindsley/reference/10X/mouse/refdata-gex-mm10-2020-A/genes/"
@@ -90,5 +90,5 @@ matrixdir="/outs/filtered_feature_bc_matrix"
 
 # step6: run Seurat
 #bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mitoCutoff $sex $genotypes $refdir $scriptdir $geneN
+Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
 

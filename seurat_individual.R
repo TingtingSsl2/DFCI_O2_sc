@@ -32,7 +32,7 @@ flag = args[9]
 mtPattern = args[10]
 rbPattern = args[11]
 qc_cutoff = as.numeric(args[12])
-mitoCutoff = as.numeric(args[13])
+mito_cutoff = as.numeric(args[13])
 sex = unlist(strsplit(args[14], ','))
 genotypes = unlist(strsplit(args[15], ','))
 refdir = args[16]
@@ -473,18 +473,18 @@ for (sample in samples){
   rm(scrna.markers)
   rm(topN)
 }
-openxlsx::write.xlsx(scrna.markers.list, paste0(outdir, "markers.xls"))
-openxlsx::write.xlsx(markers.topN.list, paste0(outdir, "markers.topN.xls"))
+openxlsx::write.xlsx(scrna.markers.list, paste0(outdir, "individual/", "markers.xls"))
+openxlsx::write.xlsx(markers.topN.list, paste0(outdir, "individual/", "markers.topN.xls"))
 
 message("DE heatmap")
-pdf(file = paste0(outdir, "top10markers.heatmap.geneSymbol.pdf"))
+pdf(file = paste0(outdir, "individual/", "top10markers.heatmap.geneSymbol.pdf"))
 for (sample in samples){
   plot1 <- DoHeatmap(scrna.list[[sample]], features = markers.topN.list[[sample]]$geneSymbol, size = 2, draw.lines = T, angle = 45, hjust = 0.2) + theme(axis.text.y = element_text(size = 5)) + NoLegend() + theme(aspect.ratio=10/10)
   print(plot1 + coord_fixed())
 }
 dev.off()
 
-pdf(file = paste0(outdir, "top10markers.heatmap.geneID.pdf"))
+pdf(file = paste0(outdir, "individual/", "top10markers.heatmap.geneID.pdf"))
 for (sample in samples){
   plot1 <- DoHeatmap(scrna.list[[sample]], features = markers.topN.list[[sample]]$geneSymbol, size = 2, draw.lines = T, angle = 45, hjust = 0.2) + theme(axis.text.y = element_text(size = 5)) + NoLegend() + scale_y_discrete(breaks=markers.topN.list[[sample]]$geneSymbol, labels=geneTable$geneID[match(markers.topN.list[[sample]]$geneSymbol, geneTable$geneSymbol)]) + theme(aspect.ratio=10/10)
   print(plot1 + coord_fixed())
@@ -494,7 +494,7 @@ dev.off()
 message("Top identified genes, feature plot")
 for (sample in samples){
   topN <- Extract_Top_Markers(scrna.markers.list[[sample]], num_genes = geneN, named_vector = FALSE, make_unique = TRUE, gene_column = "geneSymbol")
-  pdf(paste0(outdir, sample, "_", "top10markers.geneSymbol.pdf"))
+  pdf(paste0(outdir, "individual/", sample, "_", "top10markers.geneSymbol.pdf"))
   ggp = list()
   for (marker in topN){
     ggp[[marker]]=FeaturePlot(scrna.list[[sample]], features=marker)
@@ -505,7 +505,7 @@ for (sample in samples){
 
 for (sample in samples){
   topN <- Extract_Top_Markers(scrna.markers.list[[sample]], num_genes = geneN, named_vector = FALSE, make_unique = TRUE, gene_column = "geneSymbol")
-  pdf(paste0(outdir, sample, "_", "top10markers.geneID.pdf"))
+  pdf(paste0(outdir, "individual/", sample, "_", "top10markers.geneID.pdf"))
   ggp = list()
   for (marker in topN){
     ggp[[marker]]=FeaturePlot(scrna.list[[sample]], features=marker) + ggtitle(geneTable$geneID[match(marker, geneTable$geneSymbol)])
@@ -515,26 +515,26 @@ for (sample in samples){
 }
 
 message("Top identified genes, dot plot")
-pdf(file = paste0(outdir, "dotplot.DEtop10.geneSymbol.pdf"), width = 20, height = 10)
+pdf(file = paste0(outdir, "individual/", "dotplot.DEtop10.geneSymbol.pdf"), width = 20, height = 10)
 for (sample in samples){
   p1 <- DotPlot_scCustom(scrna.list[[sample]], features = topN, x_lab_rotate = TRUE, colors_use = "blue")
   print(p1)
 }
 dev.off()
 
-pdf(file = paste0(outdir, "dotplot.DEtop10.geneID.pdf"), width = 20, height = 10)
+pdf(file = paste0(outdir, "individual/", "dotplot.DEtop10.geneID.pdf"), width = 20, height = 10)
 for (sample in samples){
   p1 <- DotPlot_scCustom(scrna.list[[sample]], features = topN, x_lab_rotate = TRUE, colors_use = "blue") + scale_x_discrete(breaks=topN, labels=geneTable$geneID[match(topN, geneTable$geneSymbol)])
   print(p1)
 }
 dev.off()
 
-pdf(paste0(outdir, "dotplot.DEtop10.clustered.geneSymbol.pdf"), width = 10, height = 15)
+pdf(paste0(outdir, "individual/", "dotplot.DEtop10.clustered.geneSymbol.pdf"), width = 10, height = 15)
 p1 <- Clustered_DotPlot_relabel(scrna.list[[sample]], features = topN, x_lab_rotate = F, plot_km_elbow = FALSE, new_row_labels = topN)
 print(p1)
 dev.off()
 
-pdf(paste0(outdir, "dotplot.DEtop10.clustered.geneID.pdf"), width = 10, height = 15)
+pdf(paste0(outdir, "individual/", "dotplot.DEtop10.clustered.geneID.pdf"), width = 10, height = 15)
 p1 <- Clustered_DotPlot_relabel(scrna.list[[sample]], features = topN, plot_km_elbow = F, new_row_labels = geneTable$geneID[match(topN, geneTable$geneSymbol)])
 print(p1)
 dev.off()
