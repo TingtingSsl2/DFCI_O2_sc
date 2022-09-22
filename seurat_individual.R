@@ -46,7 +46,7 @@ sex = unlist(strsplit(args[14], ','))
 genotypes = unlist(strsplit(args[15], ','))
 refdir = args[16]
 scriptdir = args[17]
-geneN = args[18]
+geneN = as.numeric(args[18])
 
 # message("Read in marker genes")
 # gsurl=marker_link
