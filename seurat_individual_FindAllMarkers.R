@@ -85,3 +85,4 @@ openxlsx::write.xlsx(markers.topN.list, paste0(outdir, "individual/", "markers.t
 
 message("Save the FindAllMarkers data")
 saveRDS(scrna.markers.list, paste0(outdir, "individual/", "scrna.markers.list.seurat.", projectName, ".rds"))
+saveRDS(markers.topN.list, paste0(outdir, "individual/", "markers.topN.list.seurat.", projectName, ".rds"))

@@ -323,6 +323,7 @@ geneTable <- read.csv(paste0(refdir, "geneAnnotationTable.csv"), header = T, row
 
 message("Import FindAllMarkers object")
 scrna.markers.list <- readRDS(paste0(outdir, "individual/", "scrna.markers.list.seurat.", projectName, ".rds"))
+markers.topN.list <- readRDS(paste0(outdir, "individual/", "markers.topN.list.seurat.", projectName, ".rds"))
 
 message("DE heatmap")
 pdf(file = paste0(outdir, "individual/", "top10markers.heatmap.geneSymbol.pdf"))
