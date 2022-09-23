@@ -93,7 +93,10 @@ module load cellranger/6.0.0
 ##bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
 #Rscript seurat_individual_clustering.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
 
-# step6: run Seurat individual, to cell clustering step
+# step7: run Seurat individual, to FindAllMarkers step
 #bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-Rscript seurat_individual_DE.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
+Rscript seurat_individual_FindAllMarkers.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
 
+# step8: run Seurat individual, to DE plot step
+#bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
+Rscript seurat_individual_DEplot.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN

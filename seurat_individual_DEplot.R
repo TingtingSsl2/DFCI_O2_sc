@@ -321,24 +321,8 @@ Clustered_DotPlot_relabel <- function(
 message("Read in gene name table")
 geneTable <- read.csv(paste0(refdir, "geneAnnotationTable.csv"), header = T, row.names = 1)
 
-message("Import seurat object")
-scrna.list <- readRDS(paste0(outdir, "individual/", "scrna.list.seurat.", projectName, ".rds"))
-
-message("Finding differentially expressed markers")
-scrna.markers.list <- list()
-markers.topN.list <- list()
-for (sample in samples){
-  scrna.markers <- FindAllMarkers(scrna.list[[sample]], only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
-  names(scrna.markers)[names(scrna.markers) == "gene"] <- "geneSymbol"
-  scrna.markers <- cbind(scrna.markers, geneID=geneTable$geneID[match(scrna.markers$geneSymbol, geneTable$geneSymbol)])
-  scrna.markers.list[[sample]] <- scrna.markers
-  topN <- scrna.markers %>% group_by(cluster) %>% top_n(n = geneN, wt = avg_log2FC)
-  markers.topN.list[[sample]] <- topN
-  rm(scrna.markers)
-  rm(topN)
-}
-openxlsx::write.xlsx(scrna.markers.list, paste0(outdir, "individual/", "markers.xls"))
-openxlsx::write.xlsx(markers.topN.list, paste0(outdir, "individual/", "markers.topN.xls"))
+message("Import FindAllMarkers object")
+scrna.markers.list <- readRDS(paste0(outdir, "individual/", "scrna.markers.list.seurat.", projectName, ".rds"))
 
 message("DE heatmap")
 pdf(file = paste0(outdir, "individual/", "top10markers.heatmap.geneSymbol.pdf"))
