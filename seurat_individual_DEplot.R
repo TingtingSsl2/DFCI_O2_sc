@@ -321,7 +321,8 @@ Clustered_DotPlot_relabel <- function(
 message("Read in gene name table")
 geneTable <- read.csv(paste0(refdir, "geneAnnotationTable.csv"), header = T, row.names = 1)
 
-message("Import FindAllMarkers object")
+message("Import seurat and FindAllMarkers object")
+scrna.list <- readRDS(paste0(outdir, "individual/", "scrna.list.seurat.", projectName, ".rds"))
 scrna.markers.list <- readRDS(paste0(outdir, "individual/", "scrna.markers.list.seurat.", projectName, ".rds"))
 markers.topN.list <- readRDS(paste0(outdir, "individual/", "markers.topN.list.seurat.", projectName, ".rds"))
 
