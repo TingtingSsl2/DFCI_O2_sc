@@ -5,7 +5,7 @@
 # email: tingting_zhao@dfci.harvard.edu
 # date: "09/06/2022"
 # usage: source scRNA_seq.sh
-# usage: sbatch -p short -t 6:00:00 --mem=64G -e %j.err -o %j.out scRNA_seq.sh
+# usage: sbatch -p short -t 1:00:00 --mem=64G -e %j.err -o %j.out test.scRNA_seq.sh
 # platform: HMS O2
 # folder structure: project folder (data, output, result, scripts)
 
@@ -25,9 +25,9 @@ countTable_folder="BCOR_U2af1_Bcor_10x"
 # R setting
 pwd="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
 indir="/n/data2/dfci/medonc/lindsley/Tingting/data/BCOR_U2af1_Bcor_10x/"
-outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/"
+outdir="/n/data2/dfci/medonc/lindsley/Tingting/output/test/"
 scrubletdir="/n/data2/dfci/medonc/lindsley/Tingting/output/scrublet/"
-samples="Pool107_23,Pool107_24,Pool107_25,Pool107_26,Pool107_27,Pool107_28,Pool107_29,Pool107_30,Pool107_31,Pool107_32,Pool107_33,Pool107_34,Pool107_35,Pool107_36,Pool107_37,Pool107_38,Pool107_39"
+samples="Pool107_23,Pool107_24"
 projectName="rahul2022"
 marker_link="https://docs.google.com/spreadsheets/d/1gCzAeVe9Ekpyt8XdNOyBrOcw7Letr-WTpBh4-37ySpA/edit#gid=446579886"
 marker_sheet="MarkerGenesFiltered"
@@ -36,8 +36,8 @@ mtPattern="^mt"
 rbPattern="^Rp[sl]"
 qc_cutoff=3
 mito_cutoff=10
-sex="male,male,male,male,male,female,male,male,male,male,male,female,female,male,female,male,male"
-genotypes="U2Bcor,U2Bcor,Bcor,U2Bcor,U2,U2,Bcor,WT,WT,U2,U2,U2Bcor,Bcor,WT,WT,U2Bcor,Bcor"
+sex="male,male"
+genotypes="U2Bcor,U2Bcor"
 refdir="/n/data2/dfci/medonc/lindsley/reference/10X/mouse/refdata-gex-mm10-2020-A/genes/"
 scriptdir="/n/data2/dfci/medonc/lindsley/Tingting/scripts/"
 geneN=10
@@ -90,12 +90,4 @@ module load cellranger/6.0.0
 
 ## step6: run Seurat individual, to cell clustering step
 ##bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-#Rscript seurat_individual_clustering.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
-
-## step7: run Seurat individual, to FindAllMarkers step
-##bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-#Rscript seurat_individual_FindAllMarkers.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
-
-# step8: run Seurat individual, to DE plot step
-#bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-Rscript seurat_individual_DEplot.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
+Rscript test.seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
