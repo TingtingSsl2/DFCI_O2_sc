@@ -4,7 +4,7 @@
 # date: "09/06/2022"
   
 library(dplyr)
-library(Seurat)
+library(Seurat) #
 library(patchwork)
 library(ggplot2)
 library(stringr)
@@ -14,18 +14,18 @@ library(glmpca)
 library(SeuratWrappers)
 library(scry)
 library(reticulate)
-library(monocle3)
-library(FlexDotPlot)
+#library(monocle3) #
 library(cowplot)
 library(googlesheets4)
-library(tidyverse)
+library(tidyverse) #
 library(viridis)
 library(scCustomize)
 library(qs)
 library(gridExtra)
 library(plyr)
 library(circlize)
-library(ComplexHeatmap)
+library(ComplexHeatmap) #
+library(FlexDotPlot) #
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -388,3 +388,5 @@ pdf(paste0(outdir, "individual/", "dotplot.DEtop10.clustered.geneID.pdf"), width
 p1 <- Clustered_DotPlot_relabel(scrna.list[[sample]], features = topN, plot_km_elbow = F, new_row_labels = geneTable$geneID[match(topN, geneTable$geneSymbol)])
 print(p1)
 dev.off()
+
+message("Done DEplot")

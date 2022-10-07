@@ -14,8 +14,7 @@ library(glmpca)
 library(SeuratWrappers)
 library(scry)
 library(reticulate)
-library(monocle3)
-library(FlexDotPlot)
+#library(monocle3) #
 library(cowplot)
 library(googlesheets4)
 library(tidyverse)
@@ -25,7 +24,7 @@ library(qs)
 library(gridExtra)
 library(plyr)
 library(circlize)
-library(ComplexHeatmap)
+#library(ComplexHeatmap) #
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -211,3 +210,5 @@ dev.off()
 
 message("Save the data")
 saveRDS(scrna.list, paste0(outdir, "individual/", "scrna.list.seurat.", projectName, ".rds"))
+
+message("Done clustering")
