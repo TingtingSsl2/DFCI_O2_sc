@@ -42,11 +42,14 @@ refdir="/n/data2/dfci/medonc/lindsley/reference/10X/mouse/refdata-gex-mm10-2020-
 scriptdir="/home/tiz228/scripts"
 geneN=10
 
-# load modules
-#conda init /PHShome/tz949/anaconda3/envs/scrnaseq
+## load modules
+## conda init /PHShome/tz949/anaconda3/envs/scrnaseq
 source ~/.bashrc
-source activate sc
+source activate flexdotplot
 module load cellranger/6.0.0 
+# source ~/.bashrc
+# source activate sc
+# module load cellranger/6.0.0 
 
 
 # step1: download data from BaseSpace
@@ -98,7 +101,7 @@ Rscript $scriptdir/seurat_individual_FindAllMarkers.R $pwd $indir $outdir $scrub
 
 # step8: run Seurat individual, to DE plot step
 #bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-source ~/.bashrc
-source activate flexdotplot
-module load cellranger/6.0.0 
+# source ~/.bashrc
+# source activate flexdotplot
+# module load cellranger/6.0.0 
 Rscript $scriptdir/seurat_individual_DEplot.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN

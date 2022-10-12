@@ -4,7 +4,7 @@
 # date: "09/06/2022"
   
 library(dplyr)
-library(Seurat) #
+library(Seurat)
 library(patchwork)
 library(ggplot2)
 library(stringr)
@@ -14,10 +14,9 @@ library(glmpca)
 library(SeuratWrappers)
 library(scry)
 library(reticulate)
-#library(monocle3) #
 library(cowplot)
 library(googlesheets4)
-library(tidyverse) #
+library(tidyverse)
 library(viridis)
 library(scCustomize)
 library(qs)
@@ -26,6 +25,7 @@ library(plyr)
 library(circlize)
 library(ComplexHeatmap) #
 library(FlexDotPlot) #
+#library(monocle3) #
 
 args <- commandArgs(trailingOnly = TRUE)
 
