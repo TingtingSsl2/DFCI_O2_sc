@@ -4,6 +4,7 @@
 # author: Tingting Zhao
 # email: tingting_zhao@dfci.harvard.edu
 # date: "09/06/2022"
+# usage: source run_scRNA_seq.sh
 # usage: source scRNA_seq.sh
 # usage: sbatch -p short -t 6:00:00 --mem=64G -e %j.err -o %j.out scRNA_seq.sh
 # platform: HMS O2
@@ -42,15 +43,11 @@ refdir="/n/data2/dfci/medonc/lindsley/reference/10X/mouse/refdata-gex-mm10-2020-
 scriptdir="/home/tiz228/scripts"
 geneN=10
 
-## load modules
-## conda init /PHShome/tz949/anaconda3/envs/scrnaseq
+# load modules
+# conda init /PHShome/tz949/anaconda3/envs/scrnaseq
 source ~/.bashrc
 source activate flexdotplot
 module load cellranger/6.0.0 
-# source ~/.bashrc
-# source activate sc
-# module load cellranger/6.0.0 
-
 
 # step1: download data from BaseSpace
 #bs download run -i $baseSpace_ID -o $data_folder
@@ -92,16 +89,10 @@ module load cellranger/6.0.0
 
 
 # step6: run Seurat individual, to cell clustering step
-#bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
 Rscript $scriptdir/seurat_individual_clustering.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
 
 # step7: run Seurat individual, to FindAllMarkers step
-#bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
 Rscript $scriptdir/seurat_individual_FindAllMarkers.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
 
 # step8: run Seurat individual, to DE plot step
-#bsub -q big -e seurat_individual.log Rscript seurat_individual.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $mitoCutoff
-# source ~/.bashrc
-# source activate flexdotplot
-# module load cellranger/6.0.0 
 Rscript $scriptdir/seurat_individual_DEplot.R $pwd $indir $outdir $scrubletdir $samples $projectName $marker_link $marker_sheet $flag $mtPattern $rbPattern $qc_cutoff $mito_cutoff $sex $genotypes $refdir $scriptdir $geneN
